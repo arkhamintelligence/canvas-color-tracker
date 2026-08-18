@@ -8,4 +8,4 @@ declare class ColorTracker {
   reset(): void;
 }
 
-export default ColorTracker;
+export { ColorTracker as default };

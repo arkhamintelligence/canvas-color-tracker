@@ -44,9 +44,6 @@
     "dev": "rollup -w -c",
     "prepare": "npm run build"
   },
-  "dependencies": {
-    "tinycolor2": "^1.6.0"
-  },
   "devDependencies": {
     "@babel/core": "^7.26.10",
     "@babel/preset-env": "^7.26.9",
