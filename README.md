@@ -1,11 +1,9 @@
-## Forked to support Brave's bit fiddling privacy feature
-
 canvas-color-tracker
 ====================
 
 [![NPM package][npm-img]][npm-url]
 [![Build Size][build-size-img]][build-size-url]
-[![Dependencies][dependencies-img]][dependencies-url]
+[![NPM Downloads][npm-downloads-img]][npm-downloads-url]
 
 A utility to track objects on a canvas by unique px color.
 
@@ -23,25 +21,21 @@ Check out the canvas examples:
 
 ## Quick start
 
-```
+```js
 import ColorTracker from 'canvas-color-tracker';
 ```
-or
-```
-const ColorTracker = require('canvas-color-tracker');
-```
-or even
-```
-<script src="//unpkg.com/canvas-color-tracker"></script>
+or using a *script* tag
+```html
+<script src="//cdn.jsdelivr.net/npm/canvas-color-tracker"></script>
 ```
 then
-```
+```js
 const myTracker = new ColorTracker();
 
 const myObject = { ... };
 const myObjectColor = myTracker.register(myObject);
 
-(...)
+// ...
 
 const hoverColor = context.getImageData(x, y, 1, 1).data;
 const hoverObject = myTracker.lookup(hoverColor);
@@ -51,12 +45,11 @@ const hoverObject = myTracker.lookup(hoverColor);
 
 ### Instantiation
 
-new <b>ColorTracker</b>()
+new <b>ColorTracker</b>([<i>checksum_bits</i>])
 
-Creates a new object registry with a capacity of 2^24 objects.
+Creates a new object registry. 
 
-Probability of collisions at canvas drawn edges increases to certainty when the registry reaches capacity. This is due to browser anti-aliasing blending colors. The probability
-is something like N / 2^24 of an edge pixel colliding, where N is the size of the registry.
+The parameter `checkum_bits` defines how many bits should be used for storing the checksum of the colors. Higher values produce less chance of collisions introduced by anti-aliasing of pixels on object boundaries, which yield artificial erroneous colors. Each bit used for checksum eats away from the maximum size of the registry, as less bits are available for indexing objects. The maximum number of objects that can be stored in the registry is equal to `2^(24-checksum_bits) - 1` (one position is reserved for background). If not provided, `checksum_bits` takes the default of **6** bits, generating a registry of max size *~262k* objects. Normally, you'll only need to override `checksum_bits` if you wish to store more than this amount of objects.
 
 ### Methods
 
@@ -68,13 +61,18 @@ Adds an object to the registry, and returns a unique color (hex string) that can
 
 Retrieve an object from the registry by its unique color key. The color should be passed either as a plain string such as `#23a69c`, or an array of 3 octet numbers indicating the color's _r_, _g_, _b_ encoding. This array is the same format as returned by the canvas context `getImageData` method. If the color passes the checksum verification and has a registered object in the registry, it is returned. Otherwise the method returns `null`.
 
+<b>reset</b>()
+
+Clears the registry.
+
+
 ## Giving Back
 
 [![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=L398E7PKP47E8&currency_code=USD&source=url) If this project has helped you and you'd like to contribute back, you can always [buy me a ☕](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=L398E7PKP47E8&currency_code=USD&source=url)!
 
-[npm-img]: https://img.shields.io/npm/v/canvas-color-tracker.svg
+[npm-img]: https://img.shields.io/npm/v/canvas-color-tracker
 [npm-url]: https://npmjs.org/package/canvas-color-tracker
-[build-size-img]: https://img.shields.io/bundlephobia/minzip/canvas-color-tracker.svg
+[build-size-img]: https://img.shields.io/bundlephobia/minzip/canvas-color-tracker
 [build-size-url]: https://bundlephobia.com/result?p=canvas-color-tracker
-[dependencies-img]: https://img.shields.io/david/vasturiano/canvas-color-tracker.svg
-[dependencies-url]: https://david-dm.org/vasturiano/canvas-color-tracker
+[npm-downloads-img]: https://img.shields.io/npm/dt/canvas-color-tracker
+[npm-downloads-url]: https://www.npmtrends.com/canvas-color-tracker
